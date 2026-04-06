@@ -13,10 +13,10 @@
                     <p class="text-md">Facture n°{{ $order->id }}</p>
                 </div>
                 <div>
-                    <p class="text-orange-600 font-semibold">SHOPI</p>
-                    <p>Tetouan Shore, ISMO</p>
-                    <p>Tetouan</p>
-                    <p>yusufisawi@gmail.com</p>
+                    <p class="text-orange-600 font-semibold">AFO SHOPI</p>
+                    <p>Lomé Shore, ISMO</p>
+                    <p>Lomé</p>
+                    <p>afohoudou985@gmail.com</p>
                 </div>
             </header>
 

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Filament\Resources;
-
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Resources\Form;
@@ -18,10 +16,11 @@ use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
 class BillingDetailResource extends Resource
 {
     protected static ?string $model = BillingDetail::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-document';
-
     protected static ?string $navigationGroup = 'Customers';
+
+    protected static ?string $modelLabel = 'Détail de facturation';         // singulier (1 enregistrement)
+    protected static ?string $pluralModelLabel = 'Détails de facturation';  // pluriel  (liste)
 
     public static function form(Form $form): Form
     {
@@ -35,13 +34,27 @@ class BillingDetailResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user_id')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('user.name')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('user.email')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('phone')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('billing_address')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('city')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('country')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('user_id')
+                    ->label('ID utilisateur')
+                    ->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Nom')
+                    ->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('user.email')
+                    ->label('Adresse e-mail')
+                    ->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('phone')
+                    ->label('Téléphone')
+                    ->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('billing_address')
+                    ->label('Adresse de facturation')
+                    ->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('city')
+                    ->label('Ville')
+                    ->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('country')
+                    ->label('Pays')
+                    ->searchable()->sortable(),
             ])
             ->filters([
                 //
@@ -54,7 +67,7 @@ class BillingDetailResource extends Resource
                 FilamentExportBulkAction::make('export'),
             ])
             ->headerActions([
-                FilamentExportHeaderAction::make('export')
+                FilamentExportHeaderAction::make('export'),
             ]);
     }
 
@@ -68,9 +81,9 @@ class BillingDetailResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBillingDetails::route('/'),
+            'index'  => Pages\ListBillingDetails::route('/'),
             'create' => Pages\CreateBillingDetail::route('/create'),
-            'edit' => Pages\EditBillingDetail::route('/{record}/edit'),
+            'edit'   => Pages\EditBillingDetail::route('/{record}/edit'),
         ];
     }
 }

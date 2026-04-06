@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Filament\Resources;
-
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Models\Category;
@@ -17,9 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
-
+    protected static ?string $modelLabel = "Catégories";
     protected static ?string $navigationIcon = 'heroicon-o-tag';
-
     protected static ?string $navigationGroup = 'Shop';
 
     public static function form(Form $form): Form
@@ -27,18 +24,20 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                ->reactive()
-                ->afterStateUpdated(function (Closure $set, $state) {
-                    $set('slug', \Str::upper(\Str::slug($state)));
-                })
-                ->dehydrateStateUsing(fn ($state) => \Str::ucfirst($state))
-                ->autofocus()
-                ->unique()
-                ->required(),
+                    ->label('Nom')
+                    ->reactive()
+                    ->afterStateUpdated(function (Closure $set, $state) {
+                        $set('slug', \Str::upper(\Str::slug($state)));
+                    })
+                    ->dehydrateStateUsing(fn ($state) => \Str::ucfirst($state))
+                    ->autofocus()
+                    ->unique()
+                    ->required(),
                 Forms\Components\TextInput::make('slug')
-                ->disabled()
-                ->required()
-                ->dehydrateStateUsing(fn ($state) => \Str::upper($state)),
+                    ->label('Slug')
+                    ->disabled()
+                    ->required()
+                    ->dehydrateStateUsing(fn ($state) => \Str::upper($state)),
             ]);
     }
 
@@ -46,9 +45,15 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('created_at')->sortable()->date('d/m/Y H:i'),
-                Tables\Columns\TextColumn::make('updated_at')->sortable()->date('d/m/Y H:i'),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nom')
+                    ->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Créé le')
+                    ->sortable()->date('d/m/Y H:i'),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Modifié le')
+                    ->sortable()->date('d/m/Y H:i'),
             ])
             ->filters([
                 //
@@ -72,9 +77,9 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
+            'index'  => Pages\ListCategories::route('/'),
             'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'edit'   => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
 }

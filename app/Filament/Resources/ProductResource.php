@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Filament\Resources;
-
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Product;
@@ -33,9 +31,8 @@ use App\Filament\Resources\CategoryResource\RelationManagers\CategoriesRelationM
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
-
+    protected static ?string $modelLabel = "Produits";
     protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
-
     protected static ?string $navigationGroup = 'Shop';
 
     public static function form(Form $form): Form
@@ -43,29 +40,38 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nom')
                     ->required(),
                 Forms\Components\TextInput::make('SKU')
-                    ->helperText('SKU be like this SKU-####')
+                    ->label('SKU')
+                    ->helperText('Le SKU doit être au format SKU-####')
                     ->regex('/SKU-\d{4}/')
                     ->required(),
                 Forms\Components\TextInput::make('price')
+                    ->label('Prix')
                     ->numeric()
                     ->prefix('$')
                     ->rules(['min:0'])
                     ->required(),
                 Forms\Components\TextInput::make('old_price')
+                    ->label('Ancien prix')
                     ->numeric()
                     ->prefix('$')
                     ->rules(['min:0'])
                     ->required(),
-                Forms\Components\TextInput::make('quantity')->numeric(),
+                Forms\Components\TextInput::make('quantity')
+                    ->label('Quantité')
+                    ->numeric(),
                 Forms\Components\TextInput::make('brief_description')
+                    ->label('Description courte')
                     ->rules(['min:10', 'max:100'])
                     ->required(),
-                Forms\Components\Select::make('stock_status')->options([
-                    'instock' => 'In Stock',
-                    'outstock' => 'Out of Stock',
-                ])
+                Forms\Components\Select::make('stock_status')
+                    ->label('État du stock')
+                    ->options([
+                        'instock'  => 'En stock',
+                        'outstock' => 'Rupture de stock',
+                    ])
                     ->default('instock'),
                 Forms\Components\FileUpload::make('image')
                     ->getUploadedFileNameForStorageUsing(function (TemporaryUploadedFile $file): string {
@@ -73,7 +79,7 @@ class ProductResource extends Resource
                         $name = explode('.', $fileName);
                         return (string) str('images/products/main_image/' . $name[0] . '.' . $name[1]);
                     })
-                    ->label('Main Image')
+                    ->label('Image principale')
                     ->maxSize(3072)
                     ->image()
                     ->imageResizeMode('cover')
@@ -88,7 +94,7 @@ class ProductResource extends Resource
                         return (string) str('images/products/alt_images/' . $name[0] . '.' . $name[1]);
                     })
                     ->columnSpan('full')
-                    ->label('Alternate Images')
+                    ->label('Images secondaires')
                     ->maxSize(3072)
                     ->image()
                     ->imageResizeMode('cover')
@@ -97,6 +103,7 @@ class ProductResource extends Resource
                     ->imageResizeTargetHeight('450')
                     ->required(),
                 Forms\Components\RichEditor::make('description')
+                    ->label('Description')
                     ->maxLength(1000)
                     ->columnSpan('full')
                     ->toolbarButtons([
@@ -114,9 +121,9 @@ class ProductResource extends Resource
                         'undo',
                     ]),
                 Forms\Components\CheckboxList::make('categories')
+                    ->label('Catégories')
                     ->columnSpan('full')
                     ->relationship('categories', 'name'),
-
             ]);
     }
 
@@ -124,16 +131,29 @@ class ProductResource extends Resource
     {
         return $table
             ->headerActions([
-                FilamentExportHeaderAction::make('export')
+                FilamentExportHeaderAction::make('export'),
             ])
             ->columns([
-                Tables\Columns\ImageColumn::make('image'),
-                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('SKU')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('price')->prefix('$')->sortable(),
-                Tables\Columns\TextColumn::make('quantity')->sortable(),
-                Tables\Columns\TextColumn::make('created_at')->sortable()->date('M d H:i'),
-                Tables\Columns\TextColumn::make('updated_at')->sortable()->date('M d H:i'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Image'),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nom')
+                    ->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('SKU')
+                    ->label('SKU')
+                    ->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('price')
+                    ->label('Prix')
+                    ->prefix('$')->sortable(),
+                Tables\Columns\TextColumn::make('quantity')
+                    ->label('Quantité')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Créé le')
+                    ->sortable()->date('d/m/Y H:i'),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Modifié le')
+                    ->sortable()->date('d/m/Y H:i'),
             ])
             ->filters([
                 //
@@ -158,9 +178,9 @@ class ProductResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProducts::route('/'),
+            'index'  => Pages\ListProducts::route('/'),
             'create' => Pages\CreateProduct::route('/create'),
-            'edit' => Pages\EditProduct::route('/{record}/edit'),
+            'edit'   => Pages\EditProduct::route('/{record}/edit'),
         ];
     }
 }

@@ -18,7 +18,7 @@
                     {{ config('app.name') }}
                 </p>
             </div>
-            <a href="#" style="color: #ed8936; text-decoration: none;">Contacter le support Shopi</a>
+            <a href="#" style="color: #ed8936; text-decoration: none;">Contacter le support Afo Shopi</a>
         </div>
     </div>
 </x-mail::message>

@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
+    protected static ?string $modelLabel = "Utilisateurs";
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
@@ -26,10 +27,13 @@ class UserResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nom')
                     ->required(),
                 Forms\Components\TextInput::make('email')
+                    ->label('Adresse e-mail')
                     ->required(),
                 Forms\Components\TextInput::make('is_admin')
+                    ->label('Administrateur')
                     ->required(),
             ]);
     }
@@ -38,20 +42,21 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('email')->searchable()->sortable(),
-                Tables\Columns\ToggleColumn::make('is_admin')->sortable(),
-                Tables\Columns\TextColumn::make('created_at')->sortable()->date('M d H:i'),
-                Tables\Columns\TextColumn::make('updated_at')->sortable()->date('M d H:i'),
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Nom')
+                    ->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->label('Adresse e-mail')
+                    ->searchable()->sortable(),
+                Tables\Columns\ToggleColumn::make('is_admin')
+                    ->label('Administrateur')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Créé le')
+                    ->sortable()->date('M d H:i'),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Modifié le')
+                    ->sortable()->date('M d H:i'),
             ]);
     }
 

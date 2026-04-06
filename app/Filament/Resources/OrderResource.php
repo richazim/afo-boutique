@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Filament\Resources;
-
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Order;
@@ -20,9 +18,8 @@ use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
-
+    protected static ?string $modelLabel = "Commandes / Clients";
     protected static ?string $navigationIcon = 'heroicon-o-collection';
-
     protected static ?string $navigationGroup = 'Shop';
 
     public static function form(Form $form): Form
@@ -30,19 +27,24 @@ class OrderResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Select::make('status')
+                    ->label('Statut')
                     ->options([
-                        'pending' => 'Pending',
-                        'processing' => 'Processing',
-                        'completed' => 'Completed',
-                        'canceled' => 'Canceled',
+                        'pending'    => 'En attente',
+                        'processing' => 'En cours',
+                        'completed'  => 'Terminée',
+                        'canceled'   => 'Annulée',
                     ])
                     ->required(),
                 Forms\Components\Fieldset::make('user_id')
                     ->relationship('user')
-                    ->label('Customer')
+                    ->label('Client')
                     ->schema([
-                        Forms\Components\TextInput::make('name')->disabled(),
-                        Forms\Components\TextInput::make('email')->disabled(),
+                        Forms\Components\TextInput::make('name')
+                            ->label('Nom')
+                            ->disabled(),
+                        Forms\Components\TextInput::make('email')
+                            ->label('Adresse e-mail')
+                            ->disabled(),
                     ]),
             ]);
     }
@@ -51,27 +53,40 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.id')->searchable()->label('Customer id'),
-                Tables\Columns\TextColumn::make('user.name')->searchable()->label('Customer name'),
-                Tables\Columns\TextColumn::make('user.email')->searchable()->label('Customer Email')->sortable(),
+                Tables\Columns\TextColumn::make('user.id')
+                    ->label('ID client')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->label('Nom du client')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('user.email')
+                    ->label('E-mail du client')
+                    ->searchable()->sortable(),
                 Tables\Columns\BadgeColumn::make('status')
-                    ->label('Order status')
+                    ->label('Statut de la commande')
                     ->enum([
-                        'pending' => 'Pending',
-                        'processing' => 'Processing',
-                        'completed' => 'Completed',
-                        'canceled' => 'Canceled',
+                        'pending'    => 'En attente',
+                        'processing' => 'En cours',
+                        'completed'  => 'Terminée',
+                        'canceled'   => 'Annulée',
                     ])
                     ->colors([
                         'secondary' => 'pending',
-                        'warning' => 'processing',
-                        'success' => 'completed',
-                        'danger' => 'canceled',
+                        'warning'   => 'processing',
+                        'success'   => 'completed',
+                        'danger'    => 'canceled',
                     ])
                     ->sortable(),
-                Tables\Columns\TextColumn::make('total')->prefix('$')->sortable(),
-                Tables\Columns\TextColumn::make('created_at')->sortable()->date('M d H:i'),
-                Tables\Columns\TextColumn::make('updated_at')->sortable()->date('M d H:i'),
+                Tables\Columns\TextColumn::make('total')
+                    ->label('Total')
+                    ->prefix('$')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Créée le')
+                    ->sortable()->date('d/m/Y H:i'),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Modifiée le')
+                    ->sortable()->date('d/m/Y H:i'),
             ])
             ->filters([
                 //
@@ -84,7 +99,7 @@ class OrderResource extends Resource
                 FilamentExportBulkAction::make('export'),
             ])
             ->headerActions([
-                FilamentExportHeaderAction::make('export')
+                FilamentExportHeaderAction::make('export'),
             ]);
     }
 
@@ -98,9 +113,9 @@ class OrderResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListOrders::route('/'),
+            'index'  => Pages\ListOrders::route('/'),
             'create' => Pages\CreateOrder::route('/create'),
-            'edit' => Pages\EditOrder::route('/{record}/edit'),
+            'edit'   => Pages\EditOrder::route('/{record}/edit'),
         ];
     }
 }

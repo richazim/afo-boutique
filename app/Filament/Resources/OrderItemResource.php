@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Filament\Resources;
-
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\OrderItem;
@@ -18,9 +16,8 @@ use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
 class OrderItemResource extends Resource
 {
     protected static ?string $model = OrderItem::class;
-
+    protected static ?string $modelLabel = "Commandes / Produits";
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
-
     protected static ?string $navigationGroup = 'Shop';
 
     public static function form(Form $form): Form
@@ -28,24 +25,37 @@ class OrderItemResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Fieldset::make('product_id')
-                    ->label('Product information')
+                    ->label('Informations produit')
                     ->relationship('product')
                     ->schema([
-                        Forms\Components\TextInput::make('name')->disabled(),
-                        Forms\Components\TextInput::make('SKU')->disabled(),
-                        Forms\Components\TextInput::make('quantity')->disabled(),
-                        Forms\Components\TextInput::make('price')->prefix('$')->disabled(),
+                        Forms\Components\TextInput::make('name')
+                            ->label('Nom')
+                            ->disabled(),
+                        Forms\Components\TextInput::make('SKU')
+                            ->label('SKU')
+                            ->disabled(),
+                        Forms\Components\TextInput::make('quantity')
+                            ->label('Quantité')
+                            ->disabled(),
+                        Forms\Components\TextInput::make('price')
+                            ->label('Prix')
+                            ->prefix('$')
+                            ->disabled(),
                     ]),
                 Forms\Components\Fieldset::make('order_id')
                     ->relationship('order')
-                    ->label('Information about the order')
+                    ->label('Informations sur la commande')
                     ->schema([
                         Forms\Components\Fieldset::make('user_id')
-                            ->label('Buyer information')
+                            ->label('Informations acheteur')
                             ->relationship('user')
                             ->schema([
-                                Forms\Components\TextInput::make('name')->disabled(),
-                                Forms\Components\TextInput::make('email')->disabled(),
+                                Forms\Components\TextInput::make('name')
+                                    ->label('Nom')
+                                    ->disabled(),
+                                Forms\Components\TextInput::make('email')
+                                    ->label('Adresse e-mail')
+                                    ->disabled(),
                             ]),
                     ])
                     ->disabled(),
@@ -56,25 +66,37 @@ class OrderItemResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('product.image')->searchable(),
-                Tables\Columns\TextColumn::make('product.SKU')->sortable(),
-                Tables\Columns\TextColumn::make('product.name')->sortable(),
-                Tables\Columns\TextColumn::make('quantity')->sortable(),
+                Tables\Columns\ImageColumn::make('product.image')
+                    ->label('Image')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('product.SKU')
+                    ->label('SKU')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('product.name')
+                    ->label('Produit')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('quantity')
+                    ->label('Quantité')
+                    ->sortable(),
                 Tables\Columns\BadgeColumn::make('order.status')
-                    ->label('Order status')
+                    ->label('Statut de la commande')
                     ->enum([
-                        'pending' => 'Pending',
-                        'processing' => 'Processing',
-                        'completed' => 'Completed',
-                        'canceled' => 'Canceled',
+                        'pending'    => 'En attente',
+                        'processing' => 'En cours',
+                        'completed'  => 'Terminée',
+                        'canceled'   => 'Annulée',
                     ])
                     ->colors([
                         'secondary' => 'pending',
-                        'warning' => 'processing',
-                        'success' => 'completed',
-                        'danger' => 'canceled',
-                    ])->sortable(),
-                Tables\Columns\TextColumn::make('price')->prefix('$')->sortable(),
+                        'warning'   => 'processing',
+                        'success'   => 'completed',
+                        'danger'    => 'canceled',
+                    ])
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('price')
+                    ->label('Prix')
+                    ->prefix('$')
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -88,7 +110,7 @@ class OrderItemResource extends Resource
                 FilamentExportBulkAction::make('export'),
             ])
             ->headerActions([
-                FilamentExportHeaderAction::make('export')
+                FilamentExportHeaderAction::make('export'),
             ]);
     }
 
@@ -102,9 +124,9 @@ class OrderItemResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListOrderItems::route('/'),
+            'index'  => Pages\ListOrderItems::route('/'),
             'create' => Pages\CreateOrderItem::route('/create'),
-            'edit' => Pages\EditOrderItem::route('/{record}/edit'),
+            'edit'   => Pages\EditOrderItem::route('/{record}/edit'),
         ];
     }
 }
