@@ -20,4 +20,4 @@ yarn-error.log
 /Laravel-9-E-Commerce
 
 *.DS_Store
-**/*.DS_Store
+*/*.DS_Store

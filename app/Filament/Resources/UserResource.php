@@ -38,6 +38,16 @@ class UserResource extends Resource
             ]);
     }
 
+    /**
+     * Méthode permettant de overwrite la méthode Filament
+     * permettant d'afficher un bouton créer pour 'Détail de facturation'
+     * @return bool
+     */
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
     public static function table(Table $table): Table
     {
         return $table

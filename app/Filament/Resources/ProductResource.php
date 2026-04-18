@@ -77,7 +77,7 @@ class ProductResource extends Resource
                     ->getUploadedFileNameForStorageUsing(function (TemporaryUploadedFile $file): string {
                         $fileName = $file->hashName();
                         $name = explode('.', $fileName);
-                        return (string) str('images/products/main_image/' . $name[0] . '.' . $name[1]);
+                        return (string) str('storage/images/products/main_image/' . $name[0] . '.' . $name[1]);
                     })
                     ->label('Image principale')
                     ->maxSize(3072)

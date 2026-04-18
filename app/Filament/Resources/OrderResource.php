@@ -18,7 +18,7 @@ use AlperenErsoy\FilamentExport\Actions\FilamentExportHeaderAction;
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
-    protected static ?string $modelLabel = "Commandes / Clients";
+    protected static ?string $modelLabel = "Commandes";
     protected static ?string $navigationIcon = 'heroicon-o-collection';
     protected static ?string $navigationGroup = 'Shop';
 
